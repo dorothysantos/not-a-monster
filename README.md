@@ -1,2 +1,2 @@
-# You are not a Monster
+# About this Artwork
 You are a not a Monster (2024-2025) is a lyric game played over the course of 28 days (a moon cycle). It is meant to serve as a way to recognize the often challenging and difficult work of caregiving. It may be read in a linear fashion or at random. The physical instantiation of the game is a card deck that you can pull from at random. The game itself is a series of gestures and performances that may be read as a ritual or exercise. The dithered flower imagery accompanies each text as a way of giving flowers.
