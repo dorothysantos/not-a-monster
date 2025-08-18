@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+
+<head>
+  <style type="text/css">
+    @font-face {
+      font-family: 'margasa';
+      /* Choose a name for your font */
+      src: url('./margasa.woff2') format('woff2');
+      font-weight: normal;
+      /* Optional: specify font weight */
+      font-style: normal;
+      /* Optional: specify font style */
+      font-display: swap;
+      /* Optional: control font loading behavior */
+    }
+
+    div.box {
+      --s: 750px;
+      /*Size of the circle */
+      --p: 45px;
+      /* padding */
+
+      cursor: pointer;
+      height: var(--s);
+      width: var(--s);
+      border-radius: 50%;
+      line-height: 1.4em;
+      background: #333;
+      color: #fff;
+      margin: 30px auto;
+      font-size: 30.3px;
+      font-family: "margasa";
+      text-align: justify;
+      color: papayawhip;
+    }
+
+    .box i,
+    .box::before {
+      content: '';
+      float: left;
+      height: 100%;
+      width: 50%;
+      shape-outside: radial-gradient(farthest-side at right, transparent calc(100% - var(--p)), #fff 0);
+    }
+
+    .box i {
+      float: right;
+      shape-outside: radial-gradient(farthest-side at left, transparent calc(100% - var(--p)), #fff 0);
+    }
+
+
+    .Back,
+    .Front {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      border-radius: 2.5vw;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      transition: transform ease-out 0.5s;
+    }
+
+    .Flip.Back {
+      transform: rotateY(-180deg) !important;
+    }
+
+    .Flip.Front {
+      transform: rotateY(-360deg) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+
+
+  <div class="box">
+    <i></i>
+    <div id="Front">
+    </div>
+  </div>
+
+
+</body>
+<script>
+  function checkOverflow(el) {
+    var curOverflow = el.style.overflow;
+
+    if (!curOverflow || curOverflow === "visible")
+      el.style.overflow = "hidden";
+
+    var isOverflowing = el.clientWidth < el.scrollWidth
+      || el.clientHeight < el.scrollHeight;
+
+    el.style.overflow = curOverflow;
+
+    return isOverflowing;
+  }
+
+  let bx = document.querySelector("div.box");
+
+  let fixSize = function (el) {
+    console.log("ok");
+    let lastsize = parseFloat(window.getComputedStyle(el).fontSize);
+    console.log(lastsize);
+    el.style.fontSize = lastsize + "px";
+    while (!checkOverflow(el)) {
+      let nu = parseFloat(el.style.fontSize) + 0.1 + "px";
+      console.log(nu);
+      el.style.fontSize = nu;
+    }
+    //now too big;
+    while (checkOverflow(el)) {
+      let nu = parseFloat(el.style.fontSize) - 0.1 + "px";
+      console.log(nu);
+      el.style.fontSize = nu;
+    }
+  }
+
+
+
+
+
+  function randomFlower() {
+    let num = Math.floor(Math.random() * (27 - 0 + 1)) + 1;
+    num = ("" + num).padStart(2, "0");
+    return `images/drs-flower${num}.png`;
+  }
+
+  async function getCards() {
+    let res = await fetch("deck.json");
+    res = await res.json();
+    return res;
+  }
+
+  function showText(cards, card) {
+    let front = document.querySelector("#Front");
+    front.textContent = (cards.deck.cards[card - 1].text);
+
+    bx.setAttribute("style", `background: url('${randomFlower()}'); background-repeat: no-repeat; background-position: center; background-size: 1000px; text-shadow: 2px 2px 2px #000; box-shadow: inset 0 0 0 1000px rgba(0,0,0,.7);`);
+    fixSize(bx);
+  }
+
+  let doTheThing = async function () {
+
+
+    let front = document.querySelector("#Front");
+    let cards = await getCards();
+    let currentCard = 1;
+    showText(cards, currentCard);
+
+    bx.addEventListener("click", function () {
+
+      bx.setAttribute("style", `background: url('${randomFlower()}'); background-repeat: no-repeat; background-position: center; background-size: 1000px; text-shadow: 2px 2px 2px #000; box-shadow: inset 0 0 0 1000px rgba(0,0,0,.7);`);
+      fixSize(bx);
+      currentCard++;
+      showText(cards, currentCard);
+    });
+
+  }
+
+  doTheThing();
+
+
+
+</script>
+
+</html>
